@@ -24,8 +24,8 @@ class _PhotoGalleryShowState extends State<PhotoGalleryShow> {
     if (response.statusCode == 200) {
       List responseData = jsonDecode(response.body);
       for (Map<String, dynamic> imageData in responseData) {
-        photoDetailsList.add(
-            ImagesInfo(imageData['url'], imageData['title'], imageData['id']));
+        photoDetailsList.add(ImagesInfo(imageData['url'], imageData['title'],
+            imageData['id'], imageData['thumbnailUrl']));
       }
     }
     if (response.statusCode == 400 || response.statusCode == 404) {
@@ -56,7 +56,13 @@ class _PhotoGalleryShowState extends State<PhotoGalleryShow> {
                 return ListTile(
                   title: Text('${photoDetails.title}'),
                   leading: Image.network(
-                      'https://www.ryanscomputers.com/storage/products/small/dynabook-toshiba-satellite-pro-c40-g-109-intel-11681618797.webp'),
+                      photoDetails.thumbnail ??
+                          'https://demofree.sirv.com/nope-not-here.jpg',
+                      errorBuilder: (context, error, stackTrace) {
+
+                    return Image.network(
+                        'https://static.thenounproject.com/png/482114-200.png');
+                  }),
                   onTap: () {
                     Navigator.push(
                         context,
